@@ -28,6 +28,11 @@ plot(tile_xyzi)
 print(tile_xyzi)
 
 # Load selected attributes only: using filter parameter
-tile_1ret <- readLAS("217_139.las", filter = "-keep_first") # Read only first returns
+tile_1ret <- readLAS("217_139.las", filter = "-keep_first") # Read only first returns (faster, memory efficient)
+tile_1ret < filter_poi(tile_217_139, ReturnNumber == 1L)    # Reads all points before filtering
+tile_multifil <- readLAS("217_139.las", filter = "-keep_first -drop_z_below 5 -drop_z_above 50")
 plot(tile_1ret)
 print(tile_1ret)
+
+# Validating lidar data
+las_check(tile_217_139)
