@@ -48,3 +48,8 @@ las_check(tile)
   ## Using the trim parameter
   plot(tile, color = "Intensity", trim = 1800, bg = "white")
 
+# Overlays (need Ch4 and Ch7)
+overlay <- plot(tile, bg = "white", size = 3)
+add_dtm3d(overlay, dtm)
+
+
