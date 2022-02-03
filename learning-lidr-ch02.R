@@ -3,7 +3,7 @@
 # 
 # Script by:      Jose Don De Alban
 # Date created:   25 Jan 2022
-# Date modified:  
+# Date modified:  03 Feb 2022
 
 # Load libraries
 library(lidR)
