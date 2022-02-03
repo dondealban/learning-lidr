@@ -66,3 +66,61 @@ add_dtm3d(overlay, dtm)
 # Advanced 3D rendering
 offsets <- plot(tile)
 print(offsets)
+
+  # From the Ch02 tutorial on advanced 3D rendering
+  LASfile <- system.file("extdata", "MixedConifer.laz", package="lidR")
+  las <- readLAS(LASfile, select = "xyzc")
+
+  # Get the location of the trees
+  ttops <- find_trees(las, lmf(ws = 5)) 
+
+  # Extract the coordinates of the trees and apply the shift to display the lines
+  # in the rendering coordinate system
+  x <- coordinates(ttops)[,1] - offsets[1] 
+  y <- coordinates(ttops)[,2] - offsets[2] 
+  z <- ttops$Z
+
+  # Build a GL_LINES matrix for fast rendering
+  x <- rep(x, each = 2)
+  y <- rep(y, each = 2)
+  tmp <- numeric(2*length(z)) 
+  tmp[2*1:length(z)] <- z
+  z <- tmp
+  M <- cbind(x,y,z)
+
+  # Plot the point cloud
+  offsets <- plot(las, bg = "white", size = 3)
+  add_treetops3d(offsets, ttops)
+  rgl::segments3d(M, col = "black", lwd = 2)
+
+
+  
+  # Advanced 3D rendering: modified using PD LIDAR data
+  las <- readLAS("217_139.las", select = "xyzc")
+  
+  # Get the location of the trees
+  ttops <- find_trees(las, lmf(ws = 5)) 
+  
+  # Extract the coordinates of the trees and apply the shift to display the lines
+  # in the rendering coordinate system
+  x <- coordinates(ttops)[,1] - offsets[1] 
+  y <- coordinates(ttops)[,2] - offsets[2] 
+  z <- ttops$Z
+  
+  # Build a GL_LINES matrix for fast rendering
+  x <- rep(x, each = 2)
+  y <- rep(y, each = 2)
+  tmp <- numeric(2*length(z)) 
+  tmp[2*1:length(z)] <- z
+  z <- tmp
+  M <- cbind(x,y,z)
+  
+  # Plot the point cloud
+  offsets <- plot(las, bg = "white", size = 3)
+  add_treetops3d(offsets, ttops)
+  rgl::segments3d(M, col = "black", lwd = 2)
+  
+
+
+
+
