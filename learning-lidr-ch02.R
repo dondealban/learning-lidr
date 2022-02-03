@@ -12,6 +12,10 @@ library(lidR)
 pathPD <- ("/Users/dondealban/Dropbox/Image Processing/Indonesia/APRIL RER/LIDAR Data/pulau padang/")
 setwd(pathPD)
 
+# Ch02: Reading, Plotting, Querying, and Validating
+
+# 2.1. Reading LIDAR data using readLAS -----------
+
 # Load files
 tile <- readLAS("217_139.las")
 plot(tile)    # plot lidar data
@@ -34,8 +38,14 @@ tile_multifil <- readLAS("217_139.las", filter = "-keep_first -drop_z_below 5 -d
 plot(tile_1ret)
 print(tile_1ret)
 
+
+# 2.2. Validating LIDAR data ----------------------
+
 # Validating lidar data
 las_check(tile)
+
+
+# 2.3. Plotting LIDAR data ------------------------
 
 # Plotting
   ## Basic plotting
@@ -48,8 +58,11 @@ las_check(tile)
   ## Using the trim parameter
   plot(tile, color = "Intensity", trim = 1800, bg = "white")
 
-# Overlays (need Ch4 and Ch7)
+# Note: Need later chapters for script to work
+# Overlays 
 overlay <- plot(tile, bg = "white", size = 3)
 add_dtm3d(overlay, dtm)
 
-
+# Advanced 3D rendering
+offsets <- plot(tile)
+print(offsets)
