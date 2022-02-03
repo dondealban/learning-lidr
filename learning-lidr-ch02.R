@@ -7,6 +7,7 @@
 
 # Load libraries
 library(lidR)
+library(ggplot2)
 
 # Set working directory
 pathPD <- ("/Users/dondealban/Dropbox/Image Processing/Indonesia/APRIL RER/LIDAR Data/pulau padang/")
@@ -94,7 +95,6 @@ print(offsets)
   rgl::segments3d(M, col = "black", lwd = 2)
 
 
-  
   # Advanced 3D rendering: modified using PD LIDAR data
   las <- readLAS("217_139.las", select = "xyzc")
   
@@ -120,7 +120,37 @@ print(offsets)
   add_treetops3d(offsets, ttops)
   rgl::segments3d(M, col = "black", lwd = 2)
   
+# Cross-sections 2D rendering
 
+  # Create 100-m cross-sections: lidR tutorial
+  p1 <- c(273357, 5274357) # these are coordinates
+  p2 <- c(273542, 5274542) # these are coordinates
+  las_tr <- clip_transect(las, p1, p2, width = 4, xz = TRUE)
 
+  # Render cross-section
+  ggplot(las_tr@data, aes(X,Z, color = Z)) + 
+    geom_point(size = 0.5) + 
+    coord_equal() + 
+    theme_minimal() +
+    scale_color_gradientn(colours = height.colors(50))
 
-
+  # Two-step cross-section creation: Pulau Padang
+  p1 <- c(217008, 139805) # these are coordinates
+  p2 <- c(217960, 138990) # these are coordinates
+  las_tr <- clip_transect(las, p1, p2, width = 4, xz = TRUE)
+  
+  plot_crossection <- function(las,
+                               p1 = c(min(las@data$X), mean(las@data$Y)),
+                               p2 = c(max(las@data$X), mean(las@data$Y)),
+                               width = 4, colour_by = NULL)
+  {
+    colour_by <- enquo(colour_by)
+    data_clip <- clip_transect(las, p1, p2, width)
+    p <- ggplot(data_clip@data, aes(X,Z)) + geom_point(size = 0.5) + coord_equal() + theme_minimal()
+    
+    if (!is.null(colour_by))
+      p <- p + aes(color = !!colour_by) + labs(color = "")
+    
+    return(p)
+  }
+  plot_crossection(las, colour_by = factor(Classification))
